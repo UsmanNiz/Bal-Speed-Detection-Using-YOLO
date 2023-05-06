@@ -1,4 +1,13 @@
 # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
+import tkinter
+import tkinter.messagebox
+import customtkinter
+from PIL import Image,ImageTk
+import os
+import tkinter as tk
+from tkinter import filedialog
+import cv2
+import time
 """
 Run inference on images, videos, directories, streams, etc.
 
@@ -53,12 +62,12 @@ from utils.general import (LOGGER, check_file, check_img_size, check_imshow, che
                            increment_path, non_max_suppression, print_args, scale_coords, strip_optimizer, xyxy2xywh)
 from utils.plots import Annotator, colors, save_one_box
 from utils.torch_utils import select_device, time_sync
-from PyQt5.QtGui import *
+#from PyQt5.QtGui import *
 
 @torch.no_grad()
 class Detector:
     def __init__(self):
-        self.weights="D:/FYP/C3D/yolov5/runs/train/fyp_weights/1_jan_2023/best.pt"  # model.pt path(s)
+        self.weights="weights/best.pt"  # model.pt path(s)
         self.source='vid.mp4' # file/dir/URL/glob, 0 for webcam
         # print(type(frame))
         # self.source = frame
@@ -135,9 +144,9 @@ class Detector:
 
                 self.classifcation_point[int(cls_pred)].append([x1, y1, x2, y2])
 
-    def load_model(self):
+    def load_model(self,video_player_object):
          
-        vidcap = cv2.VideoCapture("videos/vid5.mp4")
+        vidcap = cv2.VideoCapture(video_player_object.current_file_path)
         self.fps = vidcap.get(cv2.CAP_PROP_FPS)
 
         print(self.fps)
@@ -156,6 +165,8 @@ class Detector:
     def inference(self,frame,video_player_obj):
         # self.model.warmup(imgsz=(1, 3, *self.imgsz))  # warmup
         seen, windows, dt = 0, [], [0.0, 0.0, 0.0]
+        temp=frame
+        self
         # for path, im, im0s, vid_cap, s in self.dataset:
         
         # self.frame.size()
@@ -194,7 +205,7 @@ class Detector:
 
         if self.videoCapFlag:
             font = cv2.FONT_HERSHEY_SIMPLEX
-            cv2.putText(im0,"Ball Speed="+str(self.ballspeed),(100, 50),font, 1,(0, 255, 255),1,cv2.LINE_4)
+            cv2.putText(temp,"Ball Speed="+str(self.ballspeed),(100, 50),font, 1,(0, 255, 255),1,cv2.LINE_4)
 
             self.videoCapCounter += 1
 
@@ -231,13 +242,19 @@ class Detector:
                     
             # Stream results
             im0 = annotator.result()
-            im0 = cv2.resize(im0,(640,480))
-            # cv2.imshow("Cricket Frames", im0)
-            # cv2.waitKey(1)
-            
-            cv2.imwrite("frame.jpg",im0)
-            video_player_obj.pixmap = QPixmap('frame.jpg')
-            video_player_obj.label.setPixmap(video_player_obj.pixmap)
+            #im0 = cv2.resize(im0,(640,480))
+           #cv2.imshow("Cricket Frames", im0)
+            #cv2.waitKey(1)
+            frame = cv2.resize(im0, (750, 550))
+            img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            img = Image.fromarray(img)
+            img = ImageTk.PhotoImage(img)
+            video_player_obj.inference_label.configure(image=img)
+            video_player_obj.inference_label.image = img
+            video_player_obj.update()
+            cv2.imwrite("frame.jpg",temp)
+            #video_player_obj.pixmap = QPixmap('frame.jpg')
+            #video_player_obj.label.setPixmap(video_player_obj.pixmap)
             cv2.waitKey(1)
             
         
@@ -327,11 +344,11 @@ class Detector:
         iou = inter_area / float(hand_area)
         return iou
 
-def main(video_player_obj):
+def run_detector(video_player_obj):
     Detect = Detector()
-    Detect.load_model()
+    Detect.load_model(video_player_obj)
     Detect.data_loader()
-    cap = cv2.VideoCapture("videos/vid5.mp4")
+    cap = cv2.VideoCapture(video_player_obj.current_file_path)
     
     while(cap.isOpened()):    
         suc,frame = cap.read()
@@ -342,6 +359,7 @@ def main(video_player_obj):
     # print("")
     # Detect.logic()
 
+#main(None)
 
 
 # if __name__ == "__main__":
