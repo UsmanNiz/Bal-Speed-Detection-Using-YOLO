@@ -1,0 +1,5 @@
+ball
+bat
+wicket
+pitch
+shoe

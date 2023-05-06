@@ -21,6 +21,7 @@ import time
 from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
+from cv2 import idct
 
 import numpy as np
 import torch
@@ -115,7 +116,7 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
     pretrained = weights.endswith('.pt')
     if pretrained:
         with torch_distributed_zero_first(LOCAL_RANK):
-            weights = attempt_download(weights)  # download if not found locally
+            weights = attempt_download(weights)  # dow   found locally
         ckpt = torch.load(weights, map_location='cpu')  # load checkpoint to CPU to avoid CUDA memory leak
         model = Model(cfg or ckpt['model'].yaml, ch=3, nc=nc, anchors=hyp.get('anchors')).to(device)  # create
         exclude = ['anchor'] if (cfg or hyp.get('anchors')) and not resume else []  # exclude keys
@@ -129,11 +130,32 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
 
     # Freeze
     freeze = [f'model.{x}.' for x in (freeze if len(freeze) > 1 else range(freeze[0]))]  # layers to freeze
-    for k, v in model.named_parameters():
-        v.requires_grad = True  # train all layers
+
+    # for idx in range(0,25):
+    #     if idx == 23:
+    #         continue
+    #     freeze.append("model." +str(idx) + str('.'))
+    
+    # print(len(model.named_parameters()))
+    # k, v = model.named_parameters()
+    
+    # print(model.named_parameters)
+    # print("KKK",len(k) , k)
+    # print("VVV",len(v) ,v)
+
+    for k, v in enumerate(model.named_parameters()):
+        # print(v, "###################")
+        if "23" in v[0]:
+            print(k,v[0])
+        
+        # v.requires_grad = True  # train all layers
+        # if "23" in v[0]:
+
         if any(x in k for x in freeze):
             LOGGER.info(f'freezing {k}')
             v.requires_grad = False
+        # 132608
+    # print(sadadadsafs)
 
     # Image size
     gs = max(int(model.stride.max()), 32)  # grid size (max stride)
@@ -304,7 +326,7 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
     for epoch in range(start_epoch, epochs):  # epoch ------------------------------------------------------------------
         callbacks.run('on_train_epoch_start')
         model.train()
-
+        print(imgsz)
         # Update image weights (optional, single-GPU only)
         if opt.image_weights:
             cw = model.class_weights.cpu().numpy() * (1 - maps) ** 2 / nc  # class weights
