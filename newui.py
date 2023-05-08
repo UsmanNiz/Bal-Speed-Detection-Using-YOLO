@@ -102,7 +102,9 @@ class App(customtkinter.CTk):
         self.wait_window(self.toplevel_window)
         
         self.current_file_path='videos/yt_vid.mp4'
-        run_detector(self)
+
+        if os.path.exists(self.current_file_path):
+            run_detector(self)
 
     def homebrew_button_event(self):
         self.current_file_path = filedialog.askopenfilename()
