@@ -8,7 +8,7 @@ class Extractor_Window(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.geometry("400x250")
-        self.title = "Youtube Video Extractor"
+        self.title("Youtube Video Extractor")
         self.wm_attributes("")
         
         self.label = customtkinter.CTkLabel(self, text="Enter YouTube Video URL:")
