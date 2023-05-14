@@ -8,6 +8,14 @@ import tkinter as tk
 from tkinter import filedialog
 import cv2
 import time
+from speednotification import *
+import tkinter
+import tkinter.messagebox
+import customtkinter
+from PIL import Image,ImageTk
+import os
+import tkinter as tk
+from tkinter import filedialog
 """
 Run inference on images, videos, directories, streams, etc.
 
@@ -205,11 +213,15 @@ class Detector:
 
         if self.videoCapFlag:
             font = cv2.FONT_HERSHEY_SIMPLEX
-            cv2.putText(temp,"Ball Speed="+str(self.ballspeed),(100, 50),font, 1,(0, 255, 255),1,cv2.LINE_4)
+            cv2.putText(temp,"Ball Speed="+str(self.ballspeed),(100, 50),font, 1,(0, 0, 255),1,cv2.LINE_4)
+            video_player_obj.ball_speed_label=customtkinter.CTkButton(video_player_obj,width=5,text="Ball Speed = "+str(self.ballspeed)+' km/hr',font=customtkinter.CTkFont(size=20, weight="bold"))
+            video_player_obj.ball_speed_label.grid(row=3, column=2,columnspan=3,padx=(20,20),pady=(20,20))
+            #speed_notification=Notification(video_player_obj,str(self.ballspeed),timeout=5000)
+            
 
             self.videoCapCounter += 1
 
-        if self.videoCapCounter == 10:
+        if self.videoCapCounter == 30:
             self.videoCapCounter = 0
             self.videoCapFlag= False
 
@@ -246,7 +258,7 @@ class Detector:
            #cv2.imshow("Cricket Frames", im0)
             #cv2.waitKey(1)
             frame = cv2.resize(im0, (750, 550))
-            img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            img = cv2.cvtColor(temp, cv2.COLOR_BGR2RGB)
             img = Image.fromarray(img)
             img = ImageTk.PhotoImage(img)
             video_player_obj.inference_label.configure(image=img)

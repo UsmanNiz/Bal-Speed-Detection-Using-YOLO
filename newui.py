@@ -9,6 +9,10 @@ import cv2
 import time
 from detect import *
 from Youtube_Video_Extractor import Extractor_Window
+import warnings
+from speednotification import *
+warnings.filterwarnings("ignore")
+
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -101,9 +105,14 @@ class App(customtkinter.CTk):
         self.toplevel_window.grab_set()
         self.wait_window(self.toplevel_window)
         
+        print('here')
         self.current_file_path='videos/yt_vid.mp4'
-
+        print('merei')
         if os.path.exists(self.current_file_path):
+            self.textbox.grid_remove()
+            self.home_page_image_label.grid_remove()
+            self.inference_label=customtkinter.CTkLabel(self,width=850,height=550,text="")
+            self.inference_label.grid(row=0, column=1,columnspan=3,padx=(20,20),pady=(20,20))
             run_detector(self)
 
     def homebrew_button_event(self):
@@ -116,7 +125,9 @@ class App(customtkinter.CTk):
             self.home_page_image_label.grid_remove()
             self.inference_label=customtkinter.CTkLabel(self,width=850,height=550,text="")
             self.inference_label.grid(row=0, column=1,columnspan=3,padx=(20,20),pady=(20,20))
+            
             run_detector(self)
+            self.ball_speed_label.grid_remove()
 
   
 

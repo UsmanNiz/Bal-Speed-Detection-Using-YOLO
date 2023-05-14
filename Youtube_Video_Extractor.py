@@ -9,7 +9,7 @@ class Extractor_Window(customtkinter.CTkToplevel):
         super().__init__(*args, **kwargs)
         self.geometry("400x250")
         self.title("Youtube Video Extractor")
-        self.wm_attributes("")
+        #self.attributes("-fullscreen",True)
         
         self.label = customtkinter.CTkLabel(self, text="Enter YouTube Video URL:")
         self.label.pack(padx=5, pady=20)
