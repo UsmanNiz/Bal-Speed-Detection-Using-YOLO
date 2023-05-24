@@ -1,19 +1,22 @@
-# syntax=docker/dockerfile:1
-FROM ubuntu:20.04
-WORKDIR /code
-RUN apt update
-RUN apt-get install -y \
-    libpng-dev \
-    freetype* \
-    libblas-dev \
-    liblapack-dev \
-    libatlas-base-dev \
-    gfortran
-RUN apt-get install -y gcc musl-dev python3-pip libgl1
-RUN apt-get install git -y
-RUN git clone https://github.com/UsmanNiz/Bal-Speed-Detection-Using-YOLO.git  # clone
+
+# Slim version of Python
+FROM python:3.8.12-slim
+
+# Download Package Information
+RUN apt-get update -y
+
+# Install Tkinter
+RUN apt-get install tk -y
+RUN apt-get install git -y 
+RUN apt-get -y install python3-pip
+
+RUN git clone https://github.com/UsmanNiz/Bal-Speed-Detection-Using-YOLO.git
 RUN cd Bal-Speed-Detection-Using-YOLO
-RUN pip install -r requirements.txt  # install
-RUN pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
-ENTRYPOINT [ "python3" ]
-CMD [ "newui.py" ]
+RUN pwd
+RUN pip3 install -r Bal-Speed-Detection-Using-YOLO/requirements.txt  # install
+RUN pip3 install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
+
+
+# Commands to run Tkinter application
+CMD ["Bal-Speed-Detection-Using-YOLO/newui.py"]
+ENTRYPOINT ["python3"]
