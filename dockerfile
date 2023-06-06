@@ -4,14 +4,16 @@ RUN apt-get update && apt-get install -y \
     apache2 \
     curl \
     git \
+    unzip\
     python3.7 \
     python3-pip
 
 
 
-RUN git clone -b New-Youtube-UI https://github.com/UsmanNiz/Bal-Speed-Detection-Using-YOLO.git
+RUN git clone  https://github.com/UsmanNiz/Bal-Speed-Detection-Using-YOLO.git
 RUN cd Bal-Speed-Detection-Using-YOLO
-RUN pwd
+RUN mkdir weights
+RUN curl -L -o /weights/file.ext "https://drive.google.com/uc?export=download&id=1dYO0l-O_6T3A_uSnx5UGo7E0QQAJPDzh"
 
 
 RUN pip3 install -r Bal-Speed-Detection-Using-YOLO/requirements.txt  # install
