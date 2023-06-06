@@ -1,4 +1,5 @@
 addict==2.4.0
+multidict
 aiofiles==0.8.0
 aiohttp==3.8.4
 aiosignal==1.3.1
