@@ -24,7 +24,7 @@ SHELL ["/bin/bash", "--login", "-c"]
 RUN echo "conda activate myenv" >> ~/.bashrc
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
-RUN git clone  https://github.com/UsmanNiz/Bal-Speed-Detection-Using-YOLO.git
+RUN git clone -b New-Youtube-UI  https://github.com/UsmanNiz/Bal-Speed-Detection-Using-YOLO.git
 WORKDIR "/Bal-Speed-Detection-Using-YOLO"
 RUN mkdir weights
 RUN curl -L -o weights/file.ext "https://drive.google.com/uc?export=download&id=1dYO0l-O_6T3A_uSnx5UGo7E0QQAJPDzh"
