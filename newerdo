@@ -1,0 +1,49 @@
+FROM nvidia/cuda:11.3.0-cudnn8-devel-ubuntu18.04
+
+RUN apt-get update && apt-get install -y \
+    apache2 \
+    curl \
+    git \
+    unzip\
+   -qq python3.8 
+   
+
+RUN rm /usr/bin/python && rm /usr/bin/python3 && ln -s /usr/bin/python3.8 /usr/bin/python &&  ln -s /usr/bin/python3.8 /usr/bin/python3 \
+    && rm /usr/local/bin/python && rm /usr/local/bin/python3 && ln -s /usr/bin/python3.8 /usr/local/bin/python &&  ln -s /usr/bin/python3.8 /usr/local/bin/python3 \
+    && apt-get install -y python3-pip python-dev python3.8-dev && python3 -m pip install pip --upgrade
+
+
+
+
+RUN git clone  https://github.com/UsmanNiz/Bal-Speed-Detection-Using-YOLO.git
+#WORKDIR "/Bal-Speed-Detection-Using-YOLO"
+RUN mkdir weights
+RUN curl -L -o weights/file.ext "https://drive.google.com/uc?export=download&id=1dYO0l-O_6T3A_uSnx5UGo7E0QQAJPDzh"
+
+
+#RUN  pwd && ls 
+
+RUN apt-get install -y python3-venv
+
+RUN python3 -m venv myenv
+
+#RUN myenv/bin/pip3 install -r /Bal-Speed-Detection-Using-YOLO/requirements.txt
+#RUN .myenv/bin/activate
+RUN myenv/bin/python3 -m pip install --upgrade pip
+
+RUN myenv/bin/pip3 install  multidict typing_extensions attr yarl async_timeout idna_ssl attrs charset_normalizer aiosignal addict aiofiles altair multidict  altgraph anyio async-timeout certifi click colorama coloredlogs  customtkinter==4.0.2 cycler darkdetect entrypoints fastapi ffmpy filelock flatbuffers fonttools  fsspec gradio  h11 httpcore httpx huggingface-hub humanfriendly idna imageio importlib-resources Jinja2 jsonschema kiwisolver  linkify-it-py markdown-it-py MarkupSafe matplotlib mdit-py-plugins mdurl mpmath 
+RUN myenv/bin/pip3 install  opencv-python==4.5.3.56  --verbose
+
+RUN myenv/bin/pip3 install packaging pandas pefile pillow pkgutil_resolve_name protobuf pycocotools==2.0.6 pydantic pydub Pygments pyinstaller pyinstaller-hooks-contrib pyparsing pyreadline3 pyrsistent python-dateutil python-multipart pytube pytz PyWavelets pywin32-ctypes PyYAML regex requests scikit-image scipy seaborn 
+RUN myenv/bin/pip3 install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
+
+
+RUN myenv/bin/pip3 install  six sniffio starlette  sympy tifffile timm 
+#tzdata uc-micro-py urllib3 uvicorn websockets yapf yarl zipp toolz tqdm  typing_extensions tokenizers transformers
+
+
+#RUN pip3 install -r Bal-Speed-Detection-Using-YOLO/requirements.txt  # install
+
+# Commands to run Tkinter application
+CMD ["Bal-Speed-Detection-Using-YOLO/newui.py"]
+ENTRYPOINT ["myenv/bin/python3"]
