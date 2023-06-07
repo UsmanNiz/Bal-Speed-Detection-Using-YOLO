@@ -14,7 +14,7 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86
 ENV PATH="/opt/conda/bin:${PATH}"
 
 # Create a new conda environment
-RUN conda create -y --name myenv python=3.7
+RUN conda create -y --name myenv python=3.7.13
 
 SHELL ["/bin/bash", "--login", "-c"]
 
@@ -30,7 +30,7 @@ RUN mkdir weights
 RUN curl -L -o weights/file.ext "https://drive.google.com/uc?export=download&id=1dYO0l-O_6T3A_uSnx5UGo7E0QQAJPDzh"
 
 RUN source activate myenv && \
-    pip install -r Bal-Speed-Detection-Using-YOLO/requirements.txt 
+    pip install -r requirements.txt 
     #pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
 # Activate the conda environment
 #SHELL ["conda", "run", "-n", "fyp", "/bin/bash", "-c"]
